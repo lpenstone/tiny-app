@@ -90,6 +90,11 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 //LIST THE SHORT URLS WITH PAIRED LONG URLS
+app.get("/test", (req, res) => {
+  let templateVars = { username: req.cookies['login'] };
+  res.send(users);
+});
+
 app.get("/register", (req, res) => {
   let templateVars = { username: req.cookies['login'] };
   res.render("register", templateVars);
@@ -108,14 +113,23 @@ app.post("/urls/new", (req, res) => {
 });
 
 //REGISTRATION
-app.post("/registration", (req, res) => {
+app.post("/register", (req, res) => {
   let id = generateRandomString()
-  users[id] = { 'id': id,
-                'email': req.body.email,
-                'password': eq.body.password}
-  res.cookie('user_id', id);
-  res.status(302);
-  res.redirect('/urls/');
+  for (var user in users){
+    if (users[user]['email'] !== req.body.email){
+      users[id] = { 'id': id,
+                    'email': req.body.email,
+                    'password': req.body.password
+                  };
+      res.cookie('user_id', id);
+      res.status(302);
+      //res.send('email: ' + req.body.email)
+      res.redirect('/urls');
+    } else {
+      res.status(400);
+      res.send('Email already taken');
+    }
+  }
 });
 
 //DELETES THE PAGE UPON REQUEST

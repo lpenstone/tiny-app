@@ -8,7 +8,7 @@
     <p style="font-size:20px; padding:50px;">
     <form action="/register" method="POST" style="margin:150px;">
       <label for="userEmail">E-mail:</label>
-        <input id="userEmail" type="email" name="email" placeholder="email@tinyapp.com" style="width: 300px" required>
+        <input id="userEmail" type="email" name="email" placeholder="email@tinyapp.com" style="width: 300px" minlength="4" required>
 
       <label for="userPassword">Password:</label>
         <input id="userPassword" type="password" name="password" minlength="8" placeholder="min 8 characters" required>
@@ -17,6 +17,5 @@
 
       </form>
       </p>
-    </form>
   </body>
 </html>
