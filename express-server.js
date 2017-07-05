@@ -30,11 +30,57 @@ function generateRandomString() {
   return shorter;
 }
 
+
+// ----------------------------------Pages --------------------------//
+
+//HOMEPAGE
+app.get("/", (req, res) => {
+  let templateVars = { username: req.cookies['login'] };
+  res.send('See our list of short URLs <a href="/urls">here</a>');
+});
+
+//PAGE WITH FORM TO SUBMIT LONG URL
+app.get("/urls/new", (req, res) => {
+  let templateVars = { username: req.cookies['login'] };
+  res.status(200);
+  res.render("urls_new", templateVars);
+});
+
+//SHOWS A SPECIFIC SHORTENED URL
+app.get("/urls/:id", (req, res) => {
+  let templateVars = { shortURL: req.params.id, urls: urlDatabase, username: req.cookies['login'] };
+  res.render("urls_show", templateVars);
+});
+
+//DATABASE LIST JSON
+app.get("/urls.json", (req, res) => {
+  let templateVars = { username: req.cookies['login'] };
+  res.json(urlDatabase, templateVars);
+});
+
+//LIST THE SHORT URLS WITH PAIRED LONG URLS
+app.get("/urls", (req, res) => {
+  let templateVars = { urls: urlDatabase, username: req.cookies['login'] };
+  res.render("urls_index", templateVars);
+});
+
+//REDIRECT TO LONGURL FROM GIVEN SHORT URL
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL];
+  if (!urlDatabase[req.params.shortURL])
+  {
+    res.status(404).send('That URL is incorrect.');
+  } else {
+  res.status(302)
+  res.redirect(longURL); res.redirect(longURL);
+  }
+});
+
 // ----------------------------------Functions --------------------------//
 
 
 //ONCE SUBMITTED THE FORM, GET GENERATED URL
-app.post("/urls", (req, res) => {
+app.post("/urls/new", (req, res) => {
   let tiny = generateRandomString()
   urlDatabase[tiny] = req.body.longURL;
   console.log(req.body);  // debug statement to see POST parameters
@@ -69,50 +115,9 @@ app.post("/urls/:id/update", (req, res) => {
   res.redirect('/urls/' + req.params.id);
 });
 
-// ----------------------------------Pages --------------------------//
 
-//HOMEPAGE
-app.get("/", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
-  res.send('See our list of short URLs <a href="/urls">here</a>');
-});
-
-//PAGE WITH FORM TO SUBMIT LONG URL
-app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
-  res.status(200);
-  res.render("urls_new", templateVars);
-});
-
-//DATABASE LIST JSON
-app.get("/urls.json", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
-  res.json(urlDatabase, templateVars);
-});
-
-//LIST THE SHORT URLS WITH PAIRED LONG URLS
-app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, username: req.cookies['login'] };
-  res.render("urls_index", templateVars);
-});
-
-//REDIRECT TO LONGURL FROM GIVEN SHORT URL
-app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
-  if (!urlDatabase[req.params.shortURL])
-  {
-    res.status(404).send('That URL is incorrect.');
-  } else {
-  res.status(302)
-  res.redirect(longURL); res.redirect(longURL);
-  }
-});
-
-app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, urls: urlDatabase, username: req.cookies['login'] };
-  res.render("urls_show", templateVars);
-});
-
+// ----------------------------------Terminal --------------------------//
+//DISPLAY IN TERMINAL
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });

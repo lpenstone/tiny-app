@@ -5,9 +5,9 @@
    <p> <label for="login">Please Login:</label>
     <input id="login" type="text" name="login" placeholder="Username" style="width: 300px">
 
-    <input type="submit" value="Login"> </p>
+    <input type="submit" value="Login"></form> </p>
 
  <% } else{ %>
     <form method="POST" action="/logout">
-    <p><%= username %></p><input type="submit" value="Logout">
+    <p>Hello, <%= username %>!</p><input type="submit" value="Logout"></form>
 <% } %>
