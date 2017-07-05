@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body>
+    <header>
+    <% include partials/_header %>
+    </header>
+    <p style="font-size:20px; padding:50px;">
+    <form action="/register" method="POST" style="margin:150px;">
+      <label for="userEmail">E-mail:</label>
+        <input id="userEmail" type="email" name="email" placeholder="email@tinyapp.com" style="width: 300px" required>
+
+      <label for="userPassword">Password:</label>
+        <input id="userPassword" type="password" name="password" minlength="8" placeholder="min 8 characters" required>
+
+      <input type="submit" value="Register">
+
+      </form>
+      </p>
+    </form>
+  </body>
+</html>

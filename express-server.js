@@ -15,6 +15,19 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+
 function generateRandomString() {
   let shorter = '';
   const options = ['a', 'b', 'c', 'd', 'e', 'f',
@@ -76,6 +89,12 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
+//LIST THE SHORT URLS WITH PAIRED LONG URLS
+app.get("/register", (req, res) => {
+  let templateVars = { username: req.cookies['login'] };
+  res.render("register", templateVars);
+});
+
 // ----------------------------------Functions --------------------------//
 
 
@@ -85,7 +104,18 @@ app.post("/urls/new", (req, res) => {
   urlDatabase[id] = req.body.longURL;
   console.log(req.body);  // debug statement to see POST parameters
   res.status(302);
-  res.redirect('/urls/'+ id);         // Respond with 'Ok' (we will replace this)
+  res.redirect('/urls/'+ id);
+});
+
+//REGISTRATION
+app.post("/registration", (req, res) => {
+  let id = generateRandomString()
+  users[id] = { 'id': id,
+                'email': req.body.email,
+                'password': eq.body.password}
+  res.cookie('user_id', id);
+  res.status(302);
+  res.redirect('/urls/');
 });
 
 //DELETES THE PAGE UPON REQUEST
