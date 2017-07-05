@@ -81,16 +81,17 @@ app.get("/u/:shortURL", (req, res) => {
 
 //ONCE SUBMITTED THE FORM, GET GENERATED URL
 app.post("/urls/new", (req, res) => {
-  let tiny = generateRandomString()
-  urlDatabase[tiny] = req.body.longURL;
+  let id = generateRandomString()
+  urlDatabase[id] = req.body.longURL;
   console.log(req.body);  // debug statement to see POST parameters
   res.status(302);
-  res.redirect('/urls/'+ tiny);         // Respond with 'Ok' (we will replace this)
+  res.redirect('/urls/'+ id);         // Respond with 'Ok' (we will replace this)
 });
 
 //DELETES THE PAGE UPON REQUEST
 app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id];
+  let id = req.params.id
+  delete urlDatabase[id];
   res.status(302);
   res.redirect('/urls');
 });
@@ -111,8 +112,9 @@ app.post("/logout", (req, res) => {
 //UPDATES THE URL
 app.post("/urls/:id/update", (req, res) => {
   urlDatabase[req.params.id] = req.body.modifyURL;
+  let id = req.params.id
   res.status(302);
-  res.redirect('/urls/' + req.params.id);
+  res.redirect('/urls/' + id);
 });
 
 
