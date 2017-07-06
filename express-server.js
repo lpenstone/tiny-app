@@ -103,7 +103,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, urls: urlDatabase, user: users[req.session.user_id] };
   let user = req.session.user_id;
   let id = req.params.id;
-  if (!req.session.user_id){
+  if (!user){
   //If the person is not logged in, redirect to login page
     res.status(401);
     res.redirect("/login");
@@ -157,7 +157,7 @@ app.get("/u/:shortURL", (req, res) => {
   } else {
   //If the requested short link does exist
     res.status(401);
-    res.send('That url does not exist.');
+    res.send('Sorry, that TinyApp URL does not exist. <a href = "/"> Back to TinyApp</a>');
   }
 });
 
@@ -209,7 +209,7 @@ app.post("/login", (req, res) => {
         let id = users[user]['id'];
         req.session.user_id = id;
         res.status(302);
-        res.redirect('/');
+        res.redirect('/urls');
       } else {
       //Unsuccessful password
         res.status(400);
