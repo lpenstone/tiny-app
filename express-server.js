@@ -231,7 +231,7 @@ app.post("/urls/new", (req, res) => {
     urlDatabase[user][urlID] = req.body.longURL;
   }
   res.status(302);
-  res.redirect('/urls/'+ id); //Redirect to the new URL listing
+  res.redirect('/urls/'+ urlID); //Redirect to the new URL listing
 });
 
 //UPDATES THE URL
