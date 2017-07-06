@@ -54,17 +54,28 @@ app.get("/", (req, res) => {
   //res.send('See our list of short URLs <a href="/urls">here</a>');
 });
 
-//PAGE WITH FORM TO SUBMIT LONG URL
+//PAGE WITH FORM TO SUBMIT LONG URL -----------------USER NEEDED
 app.get("/urls/new", (req, res) => {
   let templateVars = { user: users[req.cookies['user_id']] };
-  res.status(200);
-  res.render("urls_new", templateVars);
+  if (!req.cookies['user_id']){
+    res.status(401);
+    res.redirect("/login");
+  } else {
+    res.status(200);
+    res.render("urls_new", templateVars);
+  }
 });
 
-//SHOWS A SPECIFIC SHORTENED URL
+//SHOWS A SPECIFIC SHORTENED URL --------------------USER NEEDED
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, urls: urlDatabase, user: users[req.cookies['user_id']] };
-  res.render("urls_show", templateVars);
+  if (!req.cookies['user_id']){
+    res.status(401);
+    res.redirect("/login");
+  } else {
+    res.status(200);
+    res.render("urls_show", templateVars);
+  }
 });
 
 //DATABASE LIST JSON
@@ -73,10 +84,16 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase, templateVars);
 });
 
-//LIST THE SHORT URLS WITH PAIRED LONG URLS
+//LIST THE SHORT URLS WITH PAIRED LONG URLS ---------USER NEEDED
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']] };
-  res.render("urls_index", templateVars);
+    if (!req.cookies['user_id']){
+    res.status(401);
+    res.redirect("/login");
+  } else {
+    res.status(200);
+    res.render("urls_index", templateVars);
+  }
 });
 
 //REDIRECT TO LONGURL FROM GIVEN SHORT URL
