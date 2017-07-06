@@ -86,8 +86,8 @@ app.get("/register", (req, res) => {
 //SUBMIT long URL <--USER NEEDED-->
 app.get("/urls/new", (req, res) => {
   let id = req.session.user_id;
-  let templateVars = { user: users[id] };
-  if (!id){
+  let templateVars = { user: users[req.session.user_id] };
+  if (!req.session.user_id){
   //If the person is not logged in, redirect to login page
     res.status(401);
     res.redirect("/login");
@@ -103,7 +103,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, urls: urlDatabase, user: users[req.session.user_id] };
   let user = req.session.user_id;
   let id = req.params.id;
-  if (!user){
+  if (!req.session.user_id){
   //If the person is not logged in, redirect to login page
     res.status(401);
     res.redirect("/login");
@@ -125,7 +125,7 @@ app.get("/urls/:id", (req, res) => {
 //LIST the short URLs with paired long URLs <--USER NEEDED-->
 app.get("/urls", (req, res) => {
   let id = req.session.user_id;
-  let templateVars = { urls: urlDatabase, user: users[id] };
+  let templateVars = { urls: urlDatabase, user: users[req.session.user_id] };
   if (!id){
   //If the person is not logged in, redirect to login page
     res.status(401);
