@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const cookieSession = require('cookie-session')
 
+app.use("/assets", express.static(__dirname + '/assets'))
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2'],
@@ -85,8 +86,8 @@ app.get("/register", (req, res) => {
 //SUBMIT long URL <--USER NEEDED-->
 app.get("/urls/new", (req, res) => {
   let id = req.session.user_id;
-  let templateVars = { user: users[id] };
-  if (!id){
+  let templateVars = { user: users[req.session.user_id] };
+  if (!req.session.user_id){
   //If the person is not logged in, redirect to login page
     res.status(401);
     res.redirect("/login");
@@ -102,7 +103,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, urls: urlDatabase, user: users[req.session.user_id] };
   let user = req.session.user_id;
   let id = req.params.id;
-  if (!user){
+  if (!req.session.user_id){
   //If the person is not logged in, redirect to login page
     res.status(401);
     res.redirect("/login");
@@ -124,11 +125,11 @@ app.get("/urls/:id", (req, res) => {
 //LIST the short URLs with paired long URLs <--USER NEEDED-->
 app.get("/urls", (req, res) => {
   let id = req.session.user_id;
-  let templateVars = { urls: urlDatabase, user: users[id] };
-  if (!id){
+  let templateVars = { urls: urlDatabase, user: users[req.session.user_id] };
+  if (!req.session.user_id){
   //If the person is not logged in, redirect to login page
     res.status(401);
-    redirectes.redirect("/login");
+    res.redirect("/login");
   } else {
   //If person is logged in, show their page of URLs.
     res.status(200);
@@ -138,14 +139,25 @@ app.get("/urls", (req, res) => {
 
 //REDIRECT to long URL from short URL
 app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
-  if (!urlDatabase[req.params.shortURL]){
-  //If the requested short link does not exist
-    res.status(404).send('That URL is incorrect.');
+  //let longURL = urlDatabase[user][req.params.shortURL];
+  var test = false;
+  for (let user in urlDatabase){
+    for (let short in urlDatabase[user]){
+      if (short === req.params.shortURL){
+        test = true;
+        var longURL = urlDatabase[user][short];
+      }
+    }
+  }
+  console.log(longURL);
+  if (test){
+  //If the requested short link does not exist, declare to user
+    res.status(302);
+    res.redirect(longURL);
   } else {
-  //Send to long URL
-  res.status(302)
-  res.redirect(longURL); res.redirect(longURL);
+  //If the requested short link does exist
+    res.status(401);
+    res.send('That url does not exist.');
   }
 });
 

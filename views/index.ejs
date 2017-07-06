@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
+  <head>
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="/assets/stylesheets/main.css">
+  </head>
   <body>
     <header>
-    <% include partials/_header %>
+      <% include partials/_header %>
     </header>
-    <h1> Welcome to TinyApp </h1>
-    <p><a href ="/urls/new">Shorten my URL</a></p>
-    <p><a href ="/urls">View my URLs</a></p>
+    <h1 class = "welcome"> Welcome to TinyApp! </h1>
+    <div class = "box">
+      <h2>Shorten your long URL's to make sharing easier!</h2>
+      <p><a class = "homelink" href ="/urls/new">Shorten my URL</a> | <a class = "homelink" href ="/urls">View my URLs</a>
+    </div>
   </body>
 </html>

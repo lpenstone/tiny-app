@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
+  <head>
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="/assets/stylesheets/main.css">
+  </head>
   <body>
     <header>
-    <% include partials/_header %>
+      <% include partials/_header %>
     </header>
     <h1>Login</h1>
-    <% if(!user){ %>
+    <div class="box">
+      <% if(!user){ %>
         <form method="POST" action="/login">
-        <p> <label for="email">Email:</label>
-          <input id="email" type="email" name="email" placeholder="Email" style="width: 300px"></br>
-          <label for="password">Password:</label>
-          <input id="password" type="password" name="password" placeholder="password" style="width: 300px"></br>
+          <p><label for="userPassword">Email</label>
+            <input id="email" type="email" name="email" placeholder="tinyapp@example.com" style="width: 400px"></br>
+          </p>
+          <p><label for="userPassword">Password</label>
+            <input id="password" type="password" name="password" placeholder="" style="width: 400px"></br>
+          </p>
 
-        <input type="submit" value="Login"></form> </p>
+          <input type="submit" value="Login">
+        </form>
 
-    <% } else{ %>
+        <p><a class = "homelink" href = '/register'>Not a member? Register!</a></p>
+      <% } else{ %>
+          <p>Hello, <%= user['email'] %>!</p>
         <form method="POST" action="/logout">
-        <p>Hello, <%= user['email'] %>!</p><input type="submit" value="Logout"></form>
-    <% } %>
-
-      </form>
-      </p>
+          <input type="submit" value="Logout">
+        </form>
+      <% } %>
+    </div>
   </body>
 </html>
