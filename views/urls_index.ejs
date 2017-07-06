@@ -8,20 +8,25 @@
   <header>
     <% include partials/_header %>
   </header>
-    <h1>Your URL's</h1>
-      <div class="box">
-      <ul>
-        <% for (var url in urls[user['id']]) { %>
-        <li><%= url %> - <%= urls[user['id']][url] %>
+  <h1>Your URL's</h1>
+    <% for (var url in urls[user['id']]) { %>
+      <div class="boxblue">
+        <div><p class="short">Long:</p>
+          <span class="listlong"><%= urls[user['id']][url] %></span>
+        </div>
+
+        <div><p class="short">Shortened:</p>
+          <span class="list">http://localhost:8080/u/<%= url %></span>
+        </div>
 
         <form method="POST" action="/urls/<%= url %>/delete">
         <input type="submit" value="Delete"></form>
 
-        <a href = "/urls/<%= url %>">Edit</a>
-
-        </li>
-        <% } %>
-      </ul>
-      <p><a class="homelink" href="urls/new">Shorten another URL</a></p></div>
+        <a href = "/urls/<%= url %>"><button style="font-size:10pt">Edit</button></a>
+      </div>
+    <% } %>
+  <div class="box">
+    <p><a class="homelink" href="urls/new">Shorten another URL</a></p>
+  </div>
 </body>
 </html>

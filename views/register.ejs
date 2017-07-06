@@ -6,20 +6,20 @@
   </head>
   <body>
     <header>
-    <% include partials/_header %>
+      <% include partials/_header %>
     </header>
     <h1>Register</h1>
     <div class ="box">
-      <p><form action="/register" method="POST" style="margin:30px;">
-        <label for="userEmail"></label>
-          <input id="userEmail" type="email" name="email" placeholder="Email" style="width: 400px" minlength="4" required></br>
+      <form action="/register" method="POST" style="margin:30px;">
+        <p><label for="userEmail">Email</label>
+          <input id="userEmail" type="email" name="email" placeholder="tinyapp@example.com" style="width: 400px" minlength="4" required></br>
+        </p>
 
-        <label for="userPassword"></label>
-          <input id="userPassword" type="password" name="password" minlength="8" placeholder="Password [min 8 characters]" style="width: 400px" required></br>
-
+        <p><label for="userPassword">Password</label>
+          <input id="userPassword" type="password" name="password" minlength="8" placeholder="min 8 characters" style="width: 400px" required></br>
+        </p>
         <input type="submit" value="Register">
-        </form>
-      </p>
-      </div>
+      </form>
+    </div>
   </body>
 </html>

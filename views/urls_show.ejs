@@ -8,18 +8,17 @@
   <header>
     <% include partials/_header %>
   </header>
-  <h1>Shortened URL</h1>
-    <div class="box"><p>Full: <%= urls[user['id']][shortURL]  %></p>
-    <p>Shortened: http://localhost:8080/u/<%= shortURL %></p>
+  <h1>Your short URL</h1>
+    <div class="box">
+      <form method="POST" action="/urls/<%= shortURL %>/update">
+        <input id="modifyURL" type="text" name="modifyURL" placeholder="<%= urls[user['id']][shortURL]  %>" style="width: 85%">
+        <input type="submit" value="Update">
+      </form>
 
-    <form method="POST" action="/urls/<%= shortURL %>/update">
-    <label for="modifyURL">Modify your URL:</label>
-    <input id="modifyURL" type="text" name="modifyURL" placeholder="<%= urls[shortURL]  %>" style="width: 300px">
+      <p class="short">Shortened:</p>
+      <span class="list">http://localhost:8080/u/<%= shortURL %></span>
 
-    <input type="submit" value="Update">
-    </form>
-
-    <p><a href = '/urls'>See all your links</a></p>
+      <p><a class = "homelink" href = '/urls'>See all your URLs</a></p>
     </div>
 </body>
 </html>

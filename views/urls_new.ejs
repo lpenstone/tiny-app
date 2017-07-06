@@ -6,16 +6,15 @@
   </head>
   <body>
     <header>
-    <% include partials/_header %>
+      <% include partials/_header %>
     </header>
     <h1>Shorten my URL</h1>
-    <div class ="box"><form action="/urls/new" method="POST">
-    <p>
-      <label for="longURL"></label>
-      <input id="longURL" type="text" name="longURL" placeholder="http://my_loooooooong_url" style="width: 75%">
-      <input type="submit" value="Shorten!">
-      </form>
-      </p>
+      <div class ="box">
+          <form action="/urls/new" method="POST">
+            <input id="longURL" type="text" name="longURL" placeholder="http://my_loooooooong_url" style="width: 75%">
+            <input type="submit" value="Shorten!">
+          </form>
+        </p>
       </div>
     </form>
   </body>
