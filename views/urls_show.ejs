@@ -8,7 +8,7 @@
     <% include partials/_header %>
   </header>
   <h1>Shortened URL</h1>
-    <p>Full: <%= urls[shortURL]  %></p>
+    <p>Full: <%= urls[user['id']][shortURL]  %></p>
     <p>Shortened: http://localhost:8080/u/<%= shortURL %></p>
 
     <form method="POST" action="/urls/<%= shortURL %>/update">

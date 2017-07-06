@@ -11,9 +11,15 @@ app.set("view engine", "ejs");
 
 // ----------------------------------Database --------------------------//
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
+  "userRandomID": {
+    "b2xVn2": "http://www.lighthouselabs.ca",
+    "9sm5xK": "http://www.google.com"
+},
+  "user2RandomID": {
+    "b2xV6y": "http://www.hello.ca",
+    "9sm45K": "http://www.hi.com"
+  }
+}
 
 const users = {
   "userRandomID": {
@@ -117,12 +123,14 @@ app.get("/test", (req, res) => {
 //ONLINE LOGIN PAGE
 app.get("/login", (req, res) => {
   let templateVars = { user: users[req.cookies['user_id']] };
+  res.status(200);
   res.render("login", templateVars);
 });
 
 //ONLINE REGISTRATION PAGE
 app.get("/register", (req, res) => {
   let templateVars = { user: users[req.cookies['user_id']] };
+  res.status(200);
   res.render("register", templateVars);
 });
 
@@ -131,8 +139,10 @@ app.get("/register", (req, res) => {
 
 //ONCE SUBMITTED THE FORM, GET GENERATED URL
 app.post("/urls/new", (req, res) => {
-  let id = generateRandomString()
-  urlDatabase[id] = req.body.longURL;
+  let id = generateRandomString();
+  let user = req.cookies['user_id'];
+  urlDatabase[user] = {};
+  urlDatabase[user][id] = req.body.longURL;
   console.log(req.body);  // debug statement to see POST parameters
   res.status(302);
   res.redirect('/urls/'+ id);
@@ -158,10 +168,11 @@ app.post("/register", (req, res) => {
   }
 });
 
-//DELETES THE PAGE UPON REQUEST
+//DELETES THE URL UPON REQUEST
 app.post("/urls/:id/delete", (req, res) => {
-  let id = req.params.id
-  delete urlDatabase[id];
+  let id = req.params.id;
+  let user = req.cookies['user_id'];
+  delete urlDatabase[user][id];
   res.status(302);
   res.redirect('/urls');
 });
@@ -197,8 +208,9 @@ app.post("/logout", (req, res) => {
 
 //UPDATES THE URL
 app.post("/urls/:id/update", (req, res) => {
-  urlDatabase[req.params.id] = req.body.modifyURL;
+  let user = req.cookies['user_id'];
   let id = req.params.id
+  urlDatabase[user][id] = req.body.modifyURL;
   res.status(302);
   res.redirect('/urls/' + id);
 });
