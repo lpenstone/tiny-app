@@ -87,7 +87,7 @@ app.get("/register", (req, res) => {
 app.get("/urls/new", (req, res) => {
   let id = req.session.user_id;
   let templateVars = { user: users[req.session.user_id] };
-  if (!req.session.user_id){
+  if (!id){
   //If the person is not logged in, redirect to login page
     res.status(401);
     res.redirect("/login");
@@ -112,7 +112,7 @@ app.get("/urls/:id", (req, res) => {
     if (!urlDatabase[user][id]){
     //...but they are searching for a link that is not theirs, 401
       res.status(401);
-      res.send('Sorry this is not your link.')
+      res.send('Sorry this is not your link.');
     } else {
     //...and they are searching for a link that is theirs, show link and details
       res.status(200);
@@ -120,7 +120,6 @@ app.get("/urls/:id", (req, res) => {
     }
   }
 });
-
 
 //LIST the short URLs with paired long URLs <--USER NEEDED-->
 app.get("/urls", (req, res) => {
@@ -140,22 +139,22 @@ app.get("/urls", (req, res) => {
 //REDIRECT to long URL from short URL
 app.get("/u/:shortURL", (req, res) => {
   //let longURL = urlDatabase[user][req.params.shortURL];
-  var test = false;
+  var status = false;
   for (let user in urlDatabase){
     for (let short in urlDatabase[user]){
       if (short === req.params.shortURL){
-        test = true;
+        status = true;
         var longURL = urlDatabase[user][short];
       }
     }
   }
   console.log(longURL);
-  if (test){
-  //If the requested short link does not exist, declare to user
+  if (status){
+  //If the requested short exists, redirect to link
     res.status(302);
     res.redirect(longURL);
   } else {
-  //If the requested short link does exist
+  //If the requested short link does not exist, declare to user
     res.status(401);
     res.send('Sorry, that TinyApp URL does not exist. <a href = "/"> Back to TinyApp</a>');
   }
@@ -184,7 +183,7 @@ app.post("/register", (req, res) => {
   if (status === true){
   //If email has been registered, notify
     res.status(400);
-    res.send('That email has already been registered');
+    res.send('That email has already been registered with TinyApp');
   } else {
   //If email has not been registered, register new
     users[id] = { 'id': id,
@@ -249,7 +248,7 @@ app.post("/urls/new", (req, res) => {
 //UPDATES THE URL
 app.post("/urls/:id/update", (req, res) => {
   let user = req.session.user_id;
-  let id = req.params.id
+  let id = req.params.id;
   urlDatabase[user][id] = req.body.modifyURL;
   res.status(302);
   res.redirect('/urls/' + id);
