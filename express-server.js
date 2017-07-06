@@ -1,4 +1,5 @@
 
+// ------------------------------ Initialize Modules ------------------------------//
 const express = require("express");
 const app = express();
 
@@ -9,12 +10,14 @@ const cookieSession = require('cookie-session')
 
 app.use(cookieSession({
   name: 'session',
-  keys: ['key1', 'key2']
+  keys: ['key1', 'key2'],
+  maxAge: 24 * 60 * 60 * 1000
 }));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
-// ----------------------------------Database --------------------------//
+// ---------------------------------- Databases -------------------------------//
+
 var urlDatabase = {
   "userRandomID": {
     "b2xVn2": "http://www.lighthouselabs.ca",
@@ -39,6 +42,7 @@ const users = {
   }
 }
 
+// ---------------------------------- Function ------------------------------//
 function generateRandomString() {
   let shorter = '';
   const options = ['a', 'b', 'c', 'd', 'e', 'f',
@@ -55,17 +59,30 @@ function generateRandomString() {
 }
 
 
-// ----------------------------------Pages --------------------------//
+// ---------------------------------- Pages ------------------------------//
 
 //HOMEPAGE
 app.get("/", (req, res) => {
-  let templateVars = { user: users[req.session.user_id] }; //user: users[req.cookies['user_id']]
+  let templateVars = { user: users[req.session.user_id] };
   res.status(200);
   res.render("index", templateVars);
-  //res.send('See our list of short URLs <a href="/urls">here</a>');
 });
 
-//PAGE WITH FORM TO SUBMIT LONG URL -----------------USER NEEDED
+//LOGIN
+app.get("/login", (req, res) => {
+  let templateVars = { user: users[req.session.user_id] };
+  res.status(200);
+  res.render("login", templateVars);
+});
+
+//REGISTRATION
+app.get("/register", (req, res) => {
+  let templateVars = { user: users[req.session.user_id] };
+  res.status(200);
+  res.render("register", templateVars);
+});
+
+//SUBMIT long URL <--USER NEEDED-->
 app.get("/urls/new", (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
   if (!req.session.user_id){
@@ -77,7 +94,7 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
-//SHOWS A SPECIFIC SHORTENED URL --------------------USER NEEDED
+//LIST a specific URL and it's shortened version <--USER NEEDED-->
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, urls: urlDatabase, user: users[req.session.user_id] };
   let user = req.session.user_id;
@@ -96,13 +113,8 @@ app.get("/urls/:id", (req, res) => {
   }
 });
 
-//DATABASE LIST JSON
-app.get("/urls.json", (req, res) => {
-  let templateVars = { user: users[req.session.user_id] };
-  res.json(urlDatabase, templateVars);
-});
 
-//LIST THE SHORT URLS WITH PAIRED LONG URLS ---------USER NEEDED
+//LIST the short URLs with paired long URLs <--USER NEEDED-->
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase, user: users[req.session.user_id] };
     if (!req.session.user_id){
@@ -114,7 +126,7 @@ app.get("/urls", (req, res) => {
   }
 });
 
-//REDIRECT TO LONGURL FROM GIVEN SHORT URL
+//REDIRECT to long URL from short URL
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
   if (!urlDatabase[req.params.shortURL])
@@ -126,51 +138,24 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
-//TEST THE LIST OF USERS
-app.get("/test", (req, res) => {
+
+//DATABASE LIST .JSON
+app.get("/urls.json", (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
-  res.send(users);
+  res.json(urlDatabase, templateVars);
 });
 
-//ONLINE LOGIN PAGE
-app.get("/login", (req, res) => {
-  let templateVars = { user: users[req.session.user_id] };
-  res.status(200);
-  res.render("login", templateVars);
-});
-
-//ONLINE REGISTRATION PAGE
-app.get("/register", (req, res) => {
-  let templateVars = { user: users[req.session.user_id] };
-  res.status(200);
-  res.render("register", templateVars);
-});
-
-// ----------------------------------Functions --------------------------//
-
-
-//ONCE SUBMITTED THE FORM, GET GENERATED URL
-app.post("/urls/new", (req, res) => {
-  let id = generateRandomString();
-  let user = req.session.user_id;
-  if (!urlDatabase[user]) {
-    urlDatabase[user] = {};
-    urlDatabase[user][id] = req.body.longURL;
-  } else {
-    urlDatabase[user][id] = req.body.longURL;
-  }
-  console.log(req.body);  // debug statement to see POST parameters
-  res.status(302);
-  res.redirect('/urls/'+ id);
-});
+// ---------------------------------- CURD ---------------------------------//
 
 //REGISTRATION
 app.post("/register", (req, res) => {
   let id = generateRandomString();
+  let email = req.body.email;
   let status = false;
-  for (var user in users){
+  //for (let i = 0; i < )
+  for (let user in users){
     //Checking if email has been registered
-    if (users[user]['email'] === req.body.email){
+    if (users[user]['email'] === email){
       status = true;
     }
   }
@@ -188,15 +173,6 @@ app.post("/register", (req, res) => {
     res.status(302);
     res.redirect('/urls');
   }
-});
-
-//DELETES THE URL UPON REQUEST
-app.post("/urls/:id/delete", (req, res) => {
-  let id = req.params.id;
-  let user = req.session.user_id; //req.cookies['user_id'];
-  delete urlDatabase[user][id];
-  res.status(302);
-  res.redirect('/urls');
 });
 
 //LOGIN
@@ -232,6 +208,20 @@ app.post("/logout", (req, res) => {
   res.redirect('/');
 });
 
+//NEW URL - generate new URL
+app.post("/urls/new", (req, res) => {
+  let urlID = generateRandomString();
+  let user = req.session.user_id;
+  if (!urlDatabase[user]) { //If user does not exist in database, create new object
+    urlDatabase[user] = {};
+    urlDatabase[user][urlID] = req.body.longURL; //Add URL to new object
+  } else {
+    urlDatabase[user][urlID] = req.body.longURL; //If user does exist, add URL to object
+  }
+  res.status(302);
+  res.redirect('/urls/'+ id); //Redirect to the new URL listing
+});
+
 //UPDATES THE URL
 app.post("/urls/:id/update", (req, res) => {
   let user = req.session.user_id;
@@ -241,8 +231,17 @@ app.post("/urls/:id/update", (req, res) => {
   res.redirect('/urls/' + id);
 });
 
+//DELETES - Deletes the URL upon request
+app.post("/urls/:id/delete", (req, res) => {
+  let id = req.params.id;
+  let user = req.session.user_id;
+  delete urlDatabase[user][id];
+  res.status(302);
+  res.redirect('/urls');
+});
 
-// ----------------------------------Terminal --------------------------//
+
+// ---------------------------- Terminal Output --------------------------//
 //DISPLAY IN TERMINAL
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
