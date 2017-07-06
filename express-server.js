@@ -26,12 +26,12 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: bcrypt.hashSync("purple-monkey-dinosaur", 10);
+    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   },
  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: bcrypt.hashSync("dishwasher-funk", 10);
+    password: bcrypt.hashSync("dishwasher-funk", 10)
   }
 }
 
@@ -165,17 +165,20 @@ app.post("/register", (req, res) => {
   let id = generateRandomString();
   let status = false;
   for (var user in users){
+    //Checking if email has been registered
     if (users[user]['email'] === req.body.email){
       status = true;
     }
   }
   if (status === true){
+    //If email has been registered, notify
     res.status(400);
     res.send('That email has already been registered');
   } else {
+    //If email has not been registered, register new
     users[id] = { 'id': id,
                   'email': req.body.email,
-                  'password': bcrypt.hashSync(req.body.password, 10);
+                  'password': bcrypt.hashSync(req.body.password, 10)
                 };
     res.cookie('user_id', id);
     res.status(302);
@@ -197,19 +200,23 @@ app.post("/login", (req, res) => {
   let status = false;
   for (var user in users){
     if (users[user]['email'] === req.body.email){
-      if (users[user]['password'] === req.body.password){
+      //Success email
+      if (bcrypt.compareSync(req.body.password, users[user]['password'])){
+        //Success password
         status = true;
         let id = users[user]['id'];
         res.cookie('user_id', id);
         res.status(302);
         res.redirect('/');
       } else {
+        //Unsuccessful password
         res.status(400);
         res.send('That password is incorrect.');
       }
     }
   }
   if (status === false){
+    //Unsuccessful email
     res.status(400);
     res.send('That email does not exist.');
   }
