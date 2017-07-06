@@ -75,12 +75,19 @@ app.get("/urls/new", (req, res) => {
 //SHOWS A SPECIFIC SHORTENED URL --------------------USER NEEDED
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, urls: urlDatabase, user: users[req.cookies['user_id']] };
-  if (!req.cookies['user_id']){
+  let user = req.cookies['user_id'];
+  let id = req.params.id;
+  if (!user){
     res.status(401);
     res.redirect("/login");
   } else {
-    res.status(200);
-    res.render("urls_show", templateVars);
+    if (!urlDatabase[user][id]){
+      res.status(401);
+      res.send('Sorry this is not your link.')
+    } else {
+      res.status(200);
+      res.render("urls_show", templateVars);
+    }
   }
 });
 
@@ -141,8 +148,12 @@ app.get("/register", (req, res) => {
 app.post("/urls/new", (req, res) => {
   let id = generateRandomString();
   let user = req.cookies['user_id'];
-  urlDatabase[user] = {};
-  urlDatabase[user][id] = req.body.longURL;
+  if (!urlDatabase[user]) {
+    urlDatabase[user] = {};
+    urlDatabase[user][id] = req.body.longURL;
+  } else {
+    urlDatabase[user][id] = req.body.longURL;
+  }
   console.log(req.body);  // debug statement to see POST parameters
   res.status(302);
   res.redirect('/urls/'+ id);
