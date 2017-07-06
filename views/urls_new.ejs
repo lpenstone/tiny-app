@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
+  <head>
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="/assets/stylesheets/main.css">
+  </head>
   <body>
     <header>
     <% include partials/_header %>
     </header>
-    <p style="font-size:20px; padding:50px;">
-    <form action="/urls/new" method="POST" style="margin:150px;">
-      <label for="longURL">Enter a URL:</label>
-      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
-      <input type="submit" value="Submit">
+    <h1>Shorten my URL</h1>
+    <div class ="box"><form action="/urls/new" method="POST">
+    <p>
+      <label for="longURL"></label>
+      <input id="longURL" type="text" name="longURL" placeholder="http://my_loooooooong_url" style="width: 75%">
+      <input type="submit" value="Shorten!">
       </form>
       </p>
+      </div>
     </form>
   </body>
 </html>

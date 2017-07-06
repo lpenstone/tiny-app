@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <title>TinyApp</title>
+  <link rel="stylesheet" href="/assets/stylesheets/main.css">
 </head>
 <body>
   <header>
     <% include partials/_header %>
   </header>
   <h1>Shortened URL</h1>
-    <p>Full: <%= urls[user['id']][shortURL]  %></p>
+    <div class="box"><p>Full: <%= urls[user['id']][shortURL]  %></p>
     <p>Shortened: http://localhost:8080/u/<%= shortURL %></p>
 
     <form method="POST" action="/urls/<%= shortURL %>/update">
@@ -19,5 +20,6 @@
     </form>
 
     <p><a href = '/urls'>See all your links</a></p>
+    </div>
 </body>
 </html>

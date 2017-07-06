@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
   <title>TinyApp</title>
+  <link rel="stylesheet" href="/assets/stylesheets/main.css">
 </head>
 <body>
   <header>
     <% include partials/_header %>
   </header>
-    <h1>URL List</h1>
+    <h1>Your URL's</h1>
+      <div class="box">
       <ul>
         <% for (var url in urls[user['id']]) { %>
         <li><%= url %> - <%= urls[user['id']][url] %>
@@ -20,6 +22,6 @@
         </li>
         <% } %>
       </ul>
-      <p>Get a short url <a href="urls/new">here</a></p>
+      <p><a class="homelink" href="urls/new">Shorten another URL</a></p></div>
 </body>
 </html>

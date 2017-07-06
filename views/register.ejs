@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
+  <head>
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="/assets/stylesheets/main.css">
+  </head>
   <body>
     <header>
     <% include partials/_header %>
     </header>
     <h1>Register</h1>
+    <div class ="box">
       <p><form action="/register" method="POST" style="margin:30px;">
-        <label for="userEmail">E-mail:</label>
-          <input id="userEmail" type="email" name="email" placeholder="email@tinyapp.com" style="width: 300px" minlength="4" required></br>
+        <label for="userEmail"></label>
+          <input id="userEmail" type="email" name="email" placeholder="Email" style="width: 400px" minlength="4" required></br>
 
-        <label for="userPassword">Password:</label>
-          <input id="userPassword" type="password" name="password" minlength="8" placeholder="min 8 characters" required></br>
+        <label for="userPassword"></label>
+          <input id="userPassword" type="password" name="password" minlength="8" placeholder="Password [min 8 characters]" style="width: 400px" required></br>
 
         <input type="submit" value="Register">
         </form>
       </p>
+      </div>
   </body>
 </html>

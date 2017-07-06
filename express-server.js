@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const cookieSession = require('cookie-session')
 
+app.use("/assets", express.static(__dirname + '/assets'))
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2'],
@@ -128,7 +129,7 @@ app.get("/urls", (req, res) => {
   if (!id){
   //If the person is not logged in, redirect to login page
     res.status(401);
-    redirectes.redirect("/login");
+    res.redirect("/login");
   } else {
   //If person is logged in, show their page of URLs.
     res.status(200);
@@ -231,7 +232,7 @@ app.post("/urls/new", (req, res) => {
     urlDatabase[user][urlID] = req.body.longURL;
   }
   res.status(302);
-  res.redirect('/urls/'+ id); //Redirect to the new URL listing
+  res.redirect('/urls/'+ urlID); //Redirect to the new URL listing
 });
 
 //UPDATES THE URL

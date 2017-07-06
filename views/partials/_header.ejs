@@ -1,12 +1,18 @@
-<p class="text-center text-muted">TinyApp</p>
-
+<div class ="top">
     <% if(!user){ %>
-        <p><a href = "/login">Login</a> <a href = "/register">Register</a></p>
+        <p><a href = "/register" class="register">Register</a>
+
+        <a href = "/login" class = "login">Login</a> </p>
 
     <% } else{ %>
         <form method="POST" action="/logout">
-        <p>Hello, <%= user['email'] %>!</p><input type="submit" value="Logout"></form>
+        <input type="submit" value="Logout" class="login"></form>
+        <p class="hello">Hello, <%= user['email'] %>!</p>
     <% } %>
+
+<a class="tinyapp" href = "/">TinyApp</a>
+
+</div>
 
 
 
