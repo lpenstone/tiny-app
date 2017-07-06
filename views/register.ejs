@@ -5,17 +5,16 @@
     <header>
     <% include partials/_header %>
     </header>
-    <p>
-    <form action="/register" method="POST" style="margin:30px;">
-      <label for="userEmail">E-mail:</label>
-        <input id="userEmail" type="email" name="email" placeholder="email@tinyapp.com" style="width: 300px" minlength="4" required></br>
+    <h1>Register</h1>
+      <p><form action="/register" method="POST" style="margin:30px;">
+        <label for="userEmail">E-mail:</label>
+          <input id="userEmail" type="email" name="email" placeholder="email@tinyapp.com" style="width: 300px" minlength="4" required></br>
 
-      <label for="userPassword">Password:</label>
-        <input id="userPassword" type="password" name="password" minlength="8" placeholder="min 8 characters" required></br>
+        <label for="userPassword">Password:</label>
+          <input id="userPassword" type="password" name="password" minlength="8" placeholder="min 8 characters" required></br>
 
-      <input type="submit" value="Register">
-
-      </form>
+        <input type="submit" value="Register">
+        </form>
       </p>
   </body>
 </html>

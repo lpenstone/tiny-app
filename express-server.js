@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
+const bcrypt = require('bcrypt');
 
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}));
@@ -25,12 +26,12 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("purple-monkey-dinosaur", 10);
   },
  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("dishwasher-funk", 10);
   }
 }
 
@@ -161,21 +162,24 @@ app.post("/urls/new", (req, res) => {
 
 //REGISTRATION
 app.post("/register", (req, res) => {
-  let id = generateRandomString()
+  let id = generateRandomString();
+  let status = false;
   for (var user in users){
-    if (users[user]['email'] !== req.body.email){
-      users[id] = { 'id': id,
-                    'email': req.body.email,
-                    'password': req.body.password
-                  };
-      res.cookie('user_id', id);
-      res.status(302);
-      //res.send('email: ' + req.body.email)
-      res.redirect('/urls');
-    } else {
-      res.status(400);
-      res.send('Email already taken');
+    if (users[user]['email'] === req.body.email){
+      status = true;
     }
+  }
+  if (status === true){
+    res.status(400);
+    res.send('That email has already been registered');
+  } else {
+    users[id] = { 'id': id,
+                  'email': req.body.email,
+                  'password': bcrypt.hashSync(req.body.password, 10);
+                };
+    res.cookie('user_id', id);
+    res.status(302);
+    res.redirect('/urls');
   }
 });
 
