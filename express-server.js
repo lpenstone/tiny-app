@@ -48,32 +48,34 @@ function generateRandomString() {
 
 //HOMEPAGE
 app.get("/", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
-  res.send('See our list of short URLs <a href="/urls">here</a>');
+  let templateVars = { user: users[req.cookies['user_id']] }; //user: users[req.cookies['user_id']]
+  res.status(200);
+  res.render("index", templateVars);
+  //res.send('See our list of short URLs <a href="/urls">here</a>');
 });
 
 //PAGE WITH FORM TO SUBMIT LONG URL
 app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
+  let templateVars = { user: users[req.cookies['user_id']] };
   res.status(200);
   res.render("urls_new", templateVars);
 });
 
 //SHOWS A SPECIFIC SHORTENED URL
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, urls: urlDatabase, username: req.cookies['login'] };
+  let templateVars = { shortURL: req.params.id, urls: urlDatabase, user: users[req.cookies['user_id']] };
   res.render("urls_show", templateVars);
 });
 
 //DATABASE LIST JSON
 app.get("/urls.json", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
+  let templateVars = { user: users[req.cookies['user_id']] };
   res.json(urlDatabase, templateVars);
 });
 
 //LIST THE SHORT URLS WITH PAIRED LONG URLS
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, username: req.cookies['login'] };
+  let templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']] };
   res.render("urls_index", templateVars);
 });
 
@@ -89,14 +91,21 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
-//LIST THE SHORT URLS WITH PAIRED LONG URLS
+//TEST THE LIST OF USERS
 app.get("/test", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
+  let templateVars = { user: users[req.cookies['user_id']] };
   res.send(users);
 });
 
+//ONLINE LOGIN PAGE
+app.get("/login", (req, res) => {
+  let templateVars = { user: users[req.cookies['user_id']] };
+  res.render("login", templateVars);
+});
+
+//ONLINE REGISTRATION PAGE
 app.get("/register", (req, res) => {
-  let templateVars = { username: req.cookies['login'] };
+  let templateVars = { user: users[req.cookies['user_id']] };
   res.render("register", templateVars);
 });
 
@@ -142,15 +151,28 @@ app.post("/urls/:id/delete", (req, res) => {
 
 //LOGIN
 app.post("/login", (req, res) => {
-  res.cookie('login', req.body.login);
-  res.status(302);
-  res.redirect('/urls');
+  for (var user in users){
+    if (users[user]['email'] === req.body.email){
+      if (users[user]['password'] === req.body.password){
+        let id = users[user]['id'];
+        res.cookie('user_id', id);
+        res.status(302);
+        res.redirect('/');
+      } else {
+        res.status(400);
+        res.send('That password is incorrect.');
+      }
+    } else {
+    res.status(400);
+    res.send('That email does not exist.');
+    }
+  }
 });
 
 //LOGOUT
 app.post("/logout", (req, res) => {
-  res.clearCookie('login');
-  res.redirect('/urls');
+  res.clearCookie('user_id');
+  res.redirect('/');
 });
 
 //UPDATES THE URL
