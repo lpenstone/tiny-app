@@ -151,9 +151,11 @@ app.post("/urls/:id/delete", (req, res) => {
 
 //LOGIN
 app.post("/login", (req, res) => {
+  let status = false;
   for (var user in users){
     if (users[user]['email'] === req.body.email){
       if (users[user]['password'] === req.body.password){
+        status = true;
         let id = users[user]['id'];
         res.cookie('user_id', id);
         res.status(302);
@@ -162,10 +164,11 @@ app.post("/login", (req, res) => {
         res.status(400);
         res.send('That password is incorrect.');
       }
-    } else {
+    }
+  }
+  if (status === false){
     res.status(400);
     res.send('That email does not exist.');
-    }
   }
 });
 
