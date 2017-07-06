@@ -1,15 +1,15 @@
 # TinyApp
 
 ## About the Project
-Full stack web application built with Node and Express
+Full stack web application built with Node and Express.
 
 ### Problem Statement
 
-Given a URL, provide a new url hosted through the server that is shorter than the original.
+Given a long URL, provide a new URL hosted through the server that is shorter than the original.
 
 ### Expected Usage
 
-This program should be used through the client browser by inputted the URL that needs to be shorter.
+This program should be used in the browser by pasting the long URL when prompted. This will return a shorter URL. All past URLs are stored in the server, and can be edited or deleted.
 
 ## Getting Started
 Install all dependencies (using the 'npm install' command). Run the development web server using the 'node express_server.js' command.
