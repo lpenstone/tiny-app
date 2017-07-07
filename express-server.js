@@ -138,7 +138,6 @@ app.get("/urls", (req, res) => {
 
 //REDIRECT to long URL from short URL
 app.get("/u/:shortURL", (req, res) => {
-  //let longURL = urlDatabase[user][req.params.shortURL];
   var status = false;
   for (let user in urlDatabase){
     for (let short in urlDatabase[user]){
