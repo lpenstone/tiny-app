@@ -123,7 +123,6 @@ app.get("/urls/:id", (req, res) => {
 
 //LIST the short URLs with paired long URLs <--USER NEEDED-->
 app.get("/urls", (req, res) => {
-  let id = req.session.user_id;
   let templateVars = { urls: urlDatabase, user: users[req.session.user_id] };
   if (!req.session.user_id){
   //If the person is not logged in, redirect to login page
@@ -147,7 +146,6 @@ app.get("/u/:shortURL", (req, res) => {
       }
     }
   }
-  console.log(longURL);
   if (status){
   //If the requested short exists, redirect to link
     res.status(302);
