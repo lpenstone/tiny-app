@@ -1,11 +1,10 @@
 # TinyApp
 
 ## About the Project
-Full stack web application built with Node and Express.
+Full stack web application built with HTML5, CSS3, Javascript and Express.
 
 ### Problem Statement
-
-Given a long URL, provide a new URL hosted through the server that is shorter than the original.
+This application takes a long URL as an input, and generates a new, shorter URL linked to the host server. The short link with redirect to the original URL. 
 
 ### Expected Usage
 
